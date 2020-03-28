@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 chat-menu ">
+            <ul class="list-group list-group-flush">
+
+
+
+
+            {% if requests is defined and requests|length %}
+                {% for user in requests %}
+                <li class="list-group-item ">
+                    <article class="media">
+                        <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + user.request_from.image_file) }}">
+                        <div class="media-body">
+                          <h2><a href="{{ url_for('create_request') }}" class="article-title">{{ user.request_from.first_name }} {{ user.request_from.last_name }}</a></h2>
+                        <p class="article-content">{{ user.request_from.username }}</p>
+
+                        <div>
+                            <form action="{{ url_for('requests') }}" method="GET">
+                                <input type="hidden" name="username" value="{{ user.request_from.username }}">
+                                <button type="submit" class="btn btn-primary btn-sm m-1">Accept</button>
+                            </form>
+
+                          </div>
+                        </div>
+                    </article>
+                </li>
+                {% endfor %}
+            {% else %}
+                <h4 class="text-secondary">No requests at the moment</h4>
+            {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

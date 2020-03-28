@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 chat-menu ">
+            <ul class="list-group list-group-flush">
+                {% if users is defined and users|length %}
+                    {% for user in users %}
+                        {% if user != current_user %}
+                        <li class="list-group-item ">
+                            <article class="media">
+                                <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
+                                <div class="media-body">
+                                <h2><a href="{{ url_for('create_request', username=user.username) }}" class="article-title">{{ user.first_name }} {{ user.last_name }}</a></h2>
+                                <p class="article-content">{{ user.username }}</p>
+                                </div>
+                            </article>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <h4 class="text-secondary">you are connected to everyone </h4>
+                {% endif %}
+ 
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

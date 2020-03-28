@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 chat-menu ">
+            <ul class="list-group list-group-flush">
+                {% if connections is defined and connections|length %}
+                    {% for connection in connections %}
+                    <li class="list-group-item">
+                        <article class="media">
+                            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + connection.receiver.image_file) }}">
+                            <div class="media-body align-items-center">
+                            <h2><a href="{{ url_for('chat', username=connection.receiver.username) }}" class="article-title">{{connection.receiver.first_name}} {{connection.receiver.last_name}}</a></h2>
+                            <p class="article-content ">{{ connection.receiver.username }}</p>
+                            </div>
+                        </article>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <h4 class="text-secondary">You have no connections at the moment</h4>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

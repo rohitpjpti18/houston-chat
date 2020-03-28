@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>HoustonChat</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chatroom.css') }}">
+    <linl rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+</head>
+
+<body>
+    
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+          <div class="container">
+            <a class="navbar-brand mr-4" href="/" id="state"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+              <div class="navbar-nav mr-auto">
+                <a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
+              </div>
+              <!-- Navbar Right Side -->
+              <div class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                  <a class="nav-item nav-link" href="{{ url_for('home') }}">Chats</a>
+                  <a class="nav-item nav-link" href="{{ url_for('requests') }}">Requests</a>
+                  <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
+                  <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                  <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+                  <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+
+      <div style="padding: 32px;"></div>
+
+
+
+
+
+
+    <div id="out" class="container">    
+        {% if messages is defined and messages|length %}
+        {% for message in messages %}
+            {% if message.sender.username == current_user.username %}
+                <div class="chat-container darker">
+                    <img src="{{ url_for('static', filename='profile_pics/' + current_user.image_file) }}" alt="Avatar" class="right">
+                    <p><b>{{ message.sender.username }}: </b>{{ message.message }}</p>
+                    <span class="time-left">{{ message.time_sent|datetime }}</span>
+                </div>
+            {% else %}
+                <div class="chat-container">
+                    <img src="{{ url_for('static', filename='profile_pics/' + chatroom.receiver.image_file) }}" alt="Avatar" class="left">
+                    <p class="right-par"><b>{{ message.sender.username }}: </b>{{ message.message }}</p>
+                    <span class="time-right">{{ message.time_sent|datetime }}</span>
+                </div>
+            {% endif%}
+        {% endfor %}
+        {% endif %}
+        <div id="messages"></div>
+    </div>
+
+
+
+    <footer class='footer-submit bg-dark'>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12" style="padding: 12px;">
+                    <form class="form-group" id='message_input_form' method="GET">
+                        <input type="hidden" name="username" value="{{ chatroom.receiver.username }}">
+                        <input type="text" class="form-control" id='message_input' placeholder="Enter Message">
+                        <button type="submit" id="message_click" class="btn btn-info btn-block">Send </button>
+                      </form> 
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>
+
+
+    const socket = io.connect("http://127.0.0.1:5000");
+
+    socket.on('connect', function () {
+        socket.emit('join_room', {
+            sender: "{{ current_user.username }}",
+            receiver: "{{ chatroom.receiver.username }}",
+        });
+
+        let message_input = document.getElementById('message_input');
+
+        document.getElementById('message_input_form').onsubmit = function (e) {
+            e.preventDefault();
+            let message = message_input.value.trim();
+            if (message.length) {
+                socket.emit('send_message', {
+                    sender: "{{ current_user.username }}",
+                    receiver: "{{ chatroom.receiver.username }}",
+                    message: message
+                })
+            }
+            message_input.value = '';
+            message_input.focus();
+        }
+    });
+
+    window.onbeforeunload = function () {
+        socket.emit('leave_room', {
+            sender: "{{ current_user.username }}",
+            receiver: "{{ chatroom.receiver.username }}",
+        })
+    };
+
+    socket.on('receive_message', function (data) {
+        console.log(data);
+        const newNode = document.createElement('div');
+        if(`${data.sender}` != "{{current_user.username}}"){
+            newNode.innerHTML = `
+            <div class="chat-container">
+                <img src="{{ url_for('static', filename='profile_pics/' + chatroom.receiver.image_file) }}" alt="Avatar" class="left">
+                <p class="right-par"><b>${data.sender}: </b> ${data.message}</p>
+                <span class="time-right">${data.time}</span>
+            </div>
+            `
+        }else{
+            newNode.innerHTML = `
+            <div class="chat-container darker">
+                <img src="{{ url_for('static', filename='profile_pics/' + current_user.image_file ) }}" alt="Avatar" class="right">
+                <p><b>${data.sender}: </b>${data.message}</p>
+                <span class="time-left">${data.time}</span>
+            </div>`
+        }
+        document.getElementById('messages').appendChild(newNode);
+
+    });
+
+    socket.on('join_room_announcement', function (data) {
+        if (data.sender !== "{{ current_user.username }}") {
+            document.getElementById('state').innerHTML="online";
+        }
+    });
+
+    socket.on('leave_room_announcement', function (data) {
+        if (data.sender !== "{{ current_user.username }}") {
+            document.getElementById('state').innerHTML="offline";
+        }
+    });
+
+
+</script>
+
+</body>
+
+
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</html>
+
+
+
+
+
+
+    
+
+

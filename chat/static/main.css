@@ -1,0 +1,151 @@
+body {
+    background: #fafafa;
+    color: #333333;
+    margin-top: 5rem;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #444444 ;
+  
+  }
+  
+  .bg-steel {
+    background-color: rgb(149, 77, 77);
+  }
+  
+  .site-header .navbar-nav .nav-link {
+    color: rgb(251, 192, 192);
+  }
+  
+  .site-header .navbar-nav .nav-link:hover {
+    color: #ffffff;
+  }
+  
+  .site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+  }
+  
+  .chat-menu{
+    background: #ffffff;
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 20px;
+  }
+
+  .content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 20px;
+  }
+  
+  .article-title {
+    color: #444444;
+  }
+  
+  a.article-title:hover {
+    color: rgb(149, 77, 77);
+    text-decoration: none;
+  }
+  
+  .article-content {
+    white-space: pre-line;
+  }
+  
+  .article-img {
+    height: 85px;
+    width: 85px;
+    margin-right: 16px;
+  }
+  
+  .article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3
+  }
+  
+  .text-default{
+    color: rgb(149, 77, 77);
+  }
+
+  .article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+  }
+  
+  .account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .account-heading {
+    font-size: 2.5rem;
+  }
+
+
+  .btn-info {
+    color: #fff;
+    background-color: rgb(149, 77, 77);
+    border-color: rgb(114, 61, 61);
+  }
+  
+  .btn-info:hover {
+    color: #fff;
+    background-color: rgb(149, 77, 77);
+    border-color: rgb(114, 61, 61);
+  }
+  
+  .btn-info:focus, .btn-info.focus {
+    color: #fff;
+    background-color: rgb(149, 77, 77);
+    border-color: rgb(114, 61, 61);
+    box-shadow: 0 0 0 0.2rem rgba(114, 61, 61, 0.5);
+  }
+
+
+  .btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active,
+  .show > .btn-info.dropdown-toggle {
+    color: #fff;
+    background-color: rgb(149, 77, 77);
+    border-color: rgb(114, 61, 61);
+  }
+
+  .btn-info:not(:disabled):not(.disabled):active:focus, .btn-info:not(:disabled):not(.disabled).active:focus,
+.show > .btn-info.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(114, 61, 61, 0.5);
+}
+
+  .btn-outline-info {
+    color: rgb(149, 77, 77);
+    border-color: rgb(149, 77, 77);
+  }
+  
+  .btn-outline-info:hover {
+    color: #fff;
+    background-color: rgb(149, 77, 77);
+    border-color: rgb(149, 77, 77);
+  }
+  
+  .btn-outline-info:focus, .btn-outline-info.focus {
+    box-shadow: 0 0 0 0.2rem rgba(114, 61, 61, 0.5);
+  }
+
+.btn-outline-info:not(:disabled):not(.disabled):active, .btn-outline-info:not(:disabled):not(.disabled).active,
+.show > .btn-outline-info.dropdown-toggle {
+  color: #fff;
+  background-color: rgb(149, 77, 77);
+  border-color: rgb(149, 77, 77);
+}
+
+.btn-outline-info:not(:disabled):not(.disabled):active:focus, .btn-outline-info:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-info.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(114, 61, 61, 0.5);
+}
