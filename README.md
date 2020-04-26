@@ -1,2 +1,2 @@
-# houston_chat
+# houston-chat
 chat application 
